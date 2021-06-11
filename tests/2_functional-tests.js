@@ -10,24 +10,52 @@ suite('Functional Tests', function() {
         chai
             .request(server)
             .post('/api/issues/testing')
+            .type('form')
+            .send({
+                'issue_title': 'issue',
+                'issue_text': 'text',
+                'created_by': 'create',
+                'assigned_to': 'assign',
+                'status_text': 'status'
+            })
             .end(function (err, res) {
-
+                assert.equal(res.body.issue_title, 'issue');
+                assert.equal(res.body.issue_text, 'text');
+                assert.equal(res.body.created_by, 'create');
+                assert.equal(res.body.assigned_to, 'assign');
+                assert.equal(res.body.status_text, 'status');
+                done();
             });
     });
     test('Create an issue with only required fields: POST request to /api/issues/{project}', function(done){
         chai
             .request(server)
             .post('/api/issues/testing')
+            .type('form')
+            .send({
+                'issue_title': 'issue',
+                'issue_text': 'text',
+                'created_by': 'create'
+            })
             .end(function (err, res) {
-
+                assert.equal(res.body.issue_title, 'issue');
+                assert.equal(res.body.issue_text, 'text');
+                assert.equal(res.body.created_by, 'create');
+                done();
             });
     });
     test('Create an issue with missing required fields: POST request to /api/issues/{project}', function(done){
         chai
             .request(server)
             .post('/api/issues/testing')
+            .type('form')
+            .send({
+                'issue_title': 'issue',
+                'issue_text': 'text',
+            })
             .end(function (err, res) {
-
+                assert.equal(res.body.error, 'required field(s) missing');
+                done();
             });
     });
     test('View issues on a project: GET request to /api/issues/{project}', function(done){
