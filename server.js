@@ -3,6 +3,7 @@
 const express     = require('express');
 const expect      = require('chai').expect;
 const cors        = require('cors');
+const mongoose = require('mongoose');
 require('dotenv').config();
 
 const apiRoutes         = require('./routes/api.js');
@@ -12,13 +13,19 @@ const runner            = require('./test-runner');
 let app = express();
 
 app.use('/public', express.static(process.cwd() + '/public'));
-
 app.use(cors({origin: '*'})); //For FCC testing purposes only
-
-
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+mongoose.connect(process.env.DB, {useNewUrlParser: true, useUnifiedTopology: true});
+
+const db = mongoose.connection;
+
+db.on('error', console.error.bind(console, 'connection error:'));
+
+db.on('open', function() {
+  console.log('Connection Successful!');
+})
 
 //Sample front-end
 app.route('/:project/')
