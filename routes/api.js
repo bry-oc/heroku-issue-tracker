@@ -31,6 +31,14 @@ module.exports = function (app) {
 
     .get(function (req, res) {
       let projectName = req.params.project;
+      const issue_title = req.query.issue_title;
+      const issue_text = req.query.issue_text;
+      const created_by = req.query.created_by;
+      const assigned_to = req.query.assigned_to;
+      const status_text = req.query.status_text;
+      const _id = req.query._id;
+      const created_on = req.query.created_on;
+      const updated_on = req.query.updated_on;
       Project.findOne({ name: projectName }, function (err, proj) {
         if (err) {
           return console.error(err);
