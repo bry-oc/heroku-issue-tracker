@@ -95,47 +95,76 @@ suite('Functional Tests', function() {
                 done();
             });
     });
-    /*
     test('Update one field on an issue: PUT request to /api/issues/{project}', function(done){
         chai
             .request(server)
             .put('/api/issues/testing')
+            .send({
+                _id: '60c4045384898226dc456f47',
+                status_text: 'updated status'
+            })
             .end(function (err, res) {
-
+                assert.equal(res.body.result, 'successfully updated' );
+                assert.equal(res.body._id, '60c4045384898226dc456f47');
+                done();
             });
     });
     test('Update multiple fields on an issue: PUT request to /api/issues/{project}', function(done){
         chai
             .request(server)
             .put('/api/issues/testing')
+            .send({
+                _id: '60c4045384898226dc456f49',
+                status_text: 'updated status',
+                assigned_to: 'updated'
+            })
             .end(function (err, res) {
-
+                assert.equal(res.body.result, 'successfully updated' );
+                assert.equal(res.body._id, '60c4045384898226dc456f49');
+                done();
             });
     });
     test('Update an issue with missing _id: PUT request to /api/issues/{project}', function(done){
         chai
             .request(server)
             .put('/api/issues/testing')
+            .send({
+                status_text: 'updated status',
+                assigned_to: 'updated'
+            })
             .end(function (err, res) {
-
+                assert.equal(res.body.error, 'missing _id');
+                done();
             });
     });
     test('Update an issue with no fields to update: PUT request to /api/issues/{project}', function(done){
         chai
             .request(server)
             .put('/api/issues/testing')
+            .send({
+                _id: '60c4045384898226dc456f49'
+            })
             .end(function (err, res) {
-
+                assert.equal(res.body.error, 'could not update');
+                assert.equal(res.body._id, '60c4045384898226dc456f49');
+                done();
             });
     });
     test('Update an issue with an invalid _id: PUT request to /api/issues/{project}', function(done){
         chai
             .request(server)
             .put('/api/issues/testing')
+            .send({
+                _id: 'invalid id',
+                assigned_to: 'updated'
+            })
             .end(function (err, res) {
-
+                assert.equal(res.body.error, 'could not update');
+                assert.equal(res.body._id, '60c4045384898226dc456f49');
+                done();
             });
     });
+    /*
     test('Delete an issue: DELETE request to /api/issues/{project}', function(done){
         chai
             .request(server)
