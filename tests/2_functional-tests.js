@@ -176,11 +176,11 @@ suite('Functional Tests', function() {
             .delete('/api/issues/testing')
             .type('form')
             .send({
-                _id: '60c3fc1252357c43882b7c91'
+                _id: '60c3fb0fd66bc30cb01cddc2'
             })
             .end(function (err, res) {
                 assert.equal(res.body.result, 'successfully deleted');
-                assert.equal(res.body._id, '60c3fc1252357c43882b7c91')
+                assert.equal(res.body._id, '60c3fb0fd66bc30cb01cddc2')
             });
     });
     test('Delete an issue with an invalid _id: DELETE request to /api/issues/{project}', function(done){
