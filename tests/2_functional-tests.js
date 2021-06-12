@@ -71,24 +71,31 @@ suite('Functional Tests', function() {
                 done();
             });
     });
-    /*
+    
     test('View issues on a project with one filter: GET request to /api/issues/{project}', function(done){
         chai
             .request(server)
-            .get('/api/issues/testing')
+            .get('/api/issues/testing?issue_title=issue')
             .end(function (err, res) {
-
+                for(i = 0; i < res.body.length; i++){
+                    assert.equal(res.body[i].issue_title, 'issue');
+                }
+                done();
             });
     });
     test('View issues on a project with multiple filters: GET request to /api/issues/{project}', function(done){
         chai
             .request(server)
-            .get('/api/issues/testing')
+            .get('/api/issues/testing?issue_title=issue&assigned_to=assign')
             .end(function (err, res) {
-
+                for(i = 0; i < res.body.length; i++){
+                    assert.equal(res.body[i].issue_title, 'issue');
+                    assert.equal(res.body[i].assigned_to, 'assign');
+                }
+                done();
             });
     });
-    
+    /*
     test('Update one field on an issue: PUT request to /api/issues/{project}', function(done){
         chai
             .request(server)
