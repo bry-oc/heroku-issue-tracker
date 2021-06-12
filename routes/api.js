@@ -39,13 +39,53 @@ module.exports = function (app) {
       const _id = req.query._id;
       const created_on = req.query.created_on;
       const updated_on = req.query.updated_on;
-      Project.findOne({ name: projectName, 'issues.issue_title': issue_title, 'issues._id': _id}, function (err, proj) {
+      Project.findOne({ name: projectName }, function (err, proj) {
         if (err) {
           return console.error(err);
         } else {
           if (proj) {
-            const issues = proj.issues;
-            return res.json(issues);
+            let result = proj.issues;
+            if(issue_title){
+              result = proj.issues.filter((issue) => {
+                return issue.issue_title == issue_title;
+              })
+            }
+            if(issue_text){
+              result = proj.issues.filter((issue) => {
+                return issue.issue_text == issue_text;
+              })
+            }
+            if(created_by){
+              result = proj.issues.filter((issue) => {
+                return issue.created_by == created_by;
+              })
+            }
+            if(assigned_to){
+              result = proj.issues.filter((issue) => {
+                return issue.assigned_to == assigned_to;
+              })
+            }
+            if(status_text){
+              result = proj.issues.filter((issue) => {
+                return issue.status_text == status_text;
+              })
+            }
+            if(_id){
+              result = proj.issues.filter((issue) => {
+                return issue._id == _id;
+              })
+            }
+            if(created_on){
+              result = proj.issues.filter((issue) => {
+                return issue.created_on == created_on;
+              })
+            }
+            if(updated_on){
+              result = proj.issues.filter((issue) => {
+                return issue.updated_on == updated_on;
+              })
+            }
+            return res.json(result);
           } else {
             return res.json({ error: 'Project does not exist.' })
           }
