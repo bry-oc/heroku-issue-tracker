@@ -7,8 +7,8 @@ module.exports = function (app) {
   const upload = multer();
 
   const issueSchema = new mongoose.Schema({
-    assigned_to: {type: String, default: ""},
-    status_text: {type: String, default: ""},
+    assigned_to: { type: String, default: "" },
+    status_text: { type: String, default: "" },
     open: String,
     issue_title: String,
     issue_text: String,
@@ -22,7 +22,7 @@ module.exports = function (app) {
     issues: [issueSchema]
   });
 
-  
+
 
   const Issue = mongoose.model('Issue', issueSchema);
   const Project = mongoose.model('Project', projectSchema);
@@ -30,12 +30,17 @@ module.exports = function (app) {
   app.route('/api/issues/:project')
 
     .get(function (req, res) {
-      let project = req.params.project;
-      Project.find({name: project}, function (err, proj) {
-        if(err){
+      let projectName = req.params.project;
+      Project.findOne({ name: projectName }, function (err, proj) {
+        if (err) {
           return console.error(err);
         } else {
-          return res.json(proj.issues);
+          if (proj) {
+            const issues = proj.issues;
+            return res.json(issues);
+          } else {
+            return res.json({ error: 'Project does not exist.' })
+          }
         }
       })
     })
@@ -48,8 +53,8 @@ module.exports = function (app) {
       const assigned_to = req.body.assigned_to;
       const status_text = req.body.status_text;
       const currentTime = new Date();
-      if(!issue_title || !issue_text || !created_by){
-        return res.json({error: 'required field(s) missing'})
+      if (!issue_title || !issue_text || !created_by) {
+        return res.json({ error: 'required field(s) missing' })
       }
       Project.findOne({ name: projectName }, function (err, project) {
         if (err) {
@@ -108,7 +113,7 @@ module.exports = function (app) {
             updated_on: currentTime
           });
           newIssue.save(function (err, issue) {
-            if(err) {
+            if (err) {
               return console.error(err)
             } else {
               newProject.issues.push(issue);
@@ -130,7 +135,7 @@ module.exports = function (app) {
                 }
               })
             }
-          });         
+          });
         }
       });
     })
