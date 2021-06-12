@@ -39,7 +39,7 @@ module.exports = function (app) {
       const _id = req.query._id;
       const created_on = req.query.created_on;
       const updated_on = req.query.updated_on;
-      Project.findOne({ name: projectName }, function (err, proj) {
+      Project.findOne({ name: projectName, 'issues.issue_title': issue_title, 'issues._id': _id}, function (err, proj) {
         if (err) {
           return console.error(err);
         } else {
