@@ -188,9 +188,51 @@ module.exports = function (app) {
       });
     })
 
-    .put(function (req, res) {
-      let project = req.params.project;
-
+    .put(upload.none(), function (req, res) {
+      let projectName = req.params.project;
+      const _id = req.body._id;         
+      if(!_id){
+        return res.json({error: 'missing _id'});
+      }
+      const issue_title = req.body.issue_title;
+      const issue_text = req.body.issue_text;
+      const assigned_to = req.body.assigned_to;
+      const status_text = req.body.status_text;
+      const created_by = req.body.created_by;
+      const open = req.body.open;
+      if(!issue_title && !issue_text && !assigned_to && !status_text){
+        return res.json({ error: 'no update field(s) sent', '_id': _id });
+      }
+      const currentTime = new Date();
+      let update = {};
+      update.updated_on = currentTime;   
+      if(issue_title){
+        update.issue_title = issue_title;
+      }
+      if(issue_text){
+        update.issue_text = issue_text;
+      }
+      if(assigned_to){
+        update.assigned_to = assigned_to;
+      }
+      if(status_text){
+        update.status_text = status_text;
+      }
+      if(created_by){
+        update.created_by = created_by;
+      }
+      if(open){
+        update.open = open;
+      }
+      Issue.findByIdAndUpdate(_id, update, {new: true}, function (err, issue) {
+        if(err){
+          return console.error(err);
+        } else if(issue){
+          return res.json({result: 'successfully updated', _id: issue._id});
+        } else {
+          return res.json({error: 'could not update', _id: _id});
+        }
+      })
     })
 
     .delete(function (req, res) {

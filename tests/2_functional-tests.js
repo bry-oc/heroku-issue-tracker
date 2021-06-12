@@ -99,6 +99,7 @@ suite('Functional Tests', function() {
         chai
             .request(server)
             .put('/api/issues/testing')
+            .type('form')
             .send({
                 _id: '60c4045384898226dc456f47',
                 status_text: 'updated status'
@@ -113,6 +114,7 @@ suite('Functional Tests', function() {
         chai
             .request(server)
             .put('/api/issues/testing')
+            .type('form')
             .send({
                 _id: '60c4045384898226dc456f49',
                 status_text: 'updated status',
@@ -128,6 +130,7 @@ suite('Functional Tests', function() {
         chai
             .request(server)
             .put('/api/issues/testing')
+            .type('form')
             .send({
                 status_text: 'updated status',
                 assigned_to: 'updated'
@@ -141,11 +144,12 @@ suite('Functional Tests', function() {
         chai
             .request(server)
             .put('/api/issues/testing')
+            .type('form')
             .send({
                 _id: '60c4045384898226dc456f49'
             })
             .end(function (err, res) {
-                assert.equal(res.body.error, 'could not update');
+                assert.equal(res.body.error, 'no update field(s) sent');
                 assert.equal(res.body._id, '60c4045384898226dc456f49');
                 done();
             });
@@ -154,13 +158,14 @@ suite('Functional Tests', function() {
         chai
             .request(server)
             .put('/api/issues/testing')
+            .type('form')
             .send({
-                _id: 'invalid id',
+                _id: '5f665eb46e296f6b9b6a504d',
                 assigned_to: 'updated'
             })
             .end(function (err, res) {
                 assert.equal(res.body.error, 'could not update');
-                assert.equal(res.body._id, '60c4045384898226dc456f49');
+                assert.equal(res.body._id, '5f665eb46e296f6b9b6a504d');
                 done();
             });
     });
