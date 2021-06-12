@@ -1,12 +1,14 @@
 'use strict';
 
 const mongoose = require('mongoose');
+const multer = require("multer");
 
 module.exports = function (app) {
+  const upload = multer();
 
   const issueSchema = new mongoose.Schema({
-    assigned_to: String,
-    status_text: String,
+    assigned_to: {type: String, default: ""},
+    status_text: {type: String, default: ""},
     open: String,
     issue_title: String,
     issue_text: String,
@@ -29,24 +31,33 @@ module.exports = function (app) {
 
     .get(function (req, res) {
       let project = req.params.project;
-
+      Project.find({name: project}, function (err, proj) {
+        if(err){
+          return console.error(err);
+        } else {
+          return res.json(proj.issues);
+        }
+      })
     })
 
-    .post(function (req, res) {
-      let project = req.params.project;
+    .post(upload.none(), function (req, res) {
+      const projectName = req.params.project;
       const issue_title = req.body.issue_title;
       const issue_text = req.body.issue_text;
       const created_by = req.body.created_by;
       const assigned_to = req.body.assigned_to;
       const status_text = req.body.status_text;
       const currentTime = new Date();
-      console.log(currentTime);
-      Project.findOne({ project: project }, function (err, project) {
+      if(!issue_title || !issue_text || !created_by){
+        return res.json({error: 'required field(s) missing'})
+      }
+      Project.findOne({ name: projectName }, function (err, project) {
         if (err) {
           return res.json({ error: 'There was an error with the provided project name.' })
         } else if (project) {
           //the project exists
           //add new issue to project
+          console.log('existing project');
           const newIssue = new Issue({
             assigned_to: assigned_to,
             status_text: status_text,
@@ -74,8 +85,8 @@ module.exports = function (app) {
                     issue_title: issue.issue_title,
                     issue_text: issue.issue_text,
                     created_by: issue.created_by,
-                    created_on: issue.currentTime,
-                    updated_on: issue.currentTime
+                    created_on: issue.created_on,
+                    updated_on: issue.updated_on
                   });
                 }
               });
@@ -84,7 +95,8 @@ module.exports = function (app) {
         } else {
           //create a project
           //add new issue
-          const newProject = new Project({ name: project });
+          console.log('new project');
+          const newProject = new Project({ name: projectName });
           const newIssue = new Issue({
             assigned_to: assigned_to,
             status_text: status_text,
@@ -112,8 +124,8 @@ module.exports = function (app) {
                     issue_title: issue.issue_title,
                     issue_text: issue.issue_text,
                     created_by: issue.created_by,
-                    created_on: issue.currentTime,
-                    updated_on: issue.currentTime
+                    created_on: issue.created_on,
+                    updated_on: issue.updated_on
                   });
                 }
               })
