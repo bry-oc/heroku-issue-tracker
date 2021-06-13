@@ -189,6 +189,7 @@ module.exports = function (app) {
     })
 
     .put(upload.none(), function (req, res) {
+      const projectName = req.params.project;
       const _id = req.body._id;         
       if(!_id){
         return res.json({error: 'missing _id'});
@@ -223,31 +224,49 @@ module.exports = function (app) {
       if(open){
         update.open = open;
       }
-      Issue.findByIdAndUpdate(_id, update, {new: true}, function (err, issue) {
+      Project.findOne({name: projectName, 'issues._id': _id}, function (err, proj) {
         if(err){
           return console.error(err);
-        } else if(issue){
-          return res.json({result: 'successfully updated', _id: issue._id});
+        } else if (proj) {
+          Issue.findByIdAndUpdate(_id, update, {new: true}, function (err, issue) {
+            if(err){
+              return console.error(err);
+            } else if(issue){
+              return res.json({result: 'successfully updated', _id: issue._id});
+            } else {
+              return res.json({error: 'could not update', _id: _id});
+            }
+          })
         } else {
-          return res.json({error: 'could not update', _id: _id});
+          return res.json({error: 'project does not exist'});
         }
-      })
-    })
+      });
+  })
 
     .delete(upload.none(), function (req, res) {
+      const projectName = req.params.project;
       const _id = req.body._id;
       if(!_id){
         return res.json({error: 'missing _id'});
       }
-      Issue.findByIdAndDelete(_id, function (err, deleted) {
+      Project.findOne({name: projectName, 'issues._id': _id}, function (err, proj) {
         if(err){
           return console.error(err);
-        } else if(deleted) {
-          return res.json({result: 'successfully deleted', _id: _id});
+        } else if (proj) {
+          Issue.findByIdAndDelete(_id, function (err, deleted) {
+            if(err){
+              return console.error(err);
+            } else if(deleted) {
+              return res.json({result: 'successfully deleted', _id: _id});
+            } else {
+              return res.json({error: 'could not delete', _id: _id});
+            }
+          })
         } else {
-          return res.json({error: 'could not delete', _id: _id});
-        }
-      })
+          return res.json({error: 'project does not exist'});
+        }      
     });
+  });
+  
 
 };
