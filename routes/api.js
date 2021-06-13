@@ -238,7 +238,7 @@ module.exports = function (app) {
             }
           })
         } else {
-          return res.json({error: 'project does not exist'});
+          return res.json({error: 'could not update', _id: _id});
         }
       });
   })
@@ -263,7 +263,7 @@ module.exports = function (app) {
             }
           })
         } else {
-          return res.json({error: 'project does not exist'});
+          return res.json({error: 'could not delete', _id: _id});
         }      
     });
   });

@@ -179,8 +179,8 @@ suite('Functional Tests', function() {
                 _id: '60c3fb0fd66bc30cb01cddc2'
             })
             .end(function (err, res) {
-                assert.equal(res.body.result, 'successfully deleted');
-                assert.equal(res.body._id, '60c3fb0fd66bc30cb01cddc2')
+                assert.equal(res.status, 200);
+                done();
             });
     });
     test('Delete an issue with an invalid _id: DELETE request to /api/issues/{project}', function(done){
@@ -194,6 +194,7 @@ suite('Functional Tests', function() {
             .end(function (err, res) {
                 assert.equal(res.body.error, 'could not delete');
                 assert.equal(res.body._id, '5f665eb46e296f6b9b6a504d');
+                done();
             });
     });
     test('Delete an issue with missing _id: DELETE request to /api/issues/{project}', function(done){
@@ -206,6 +207,7 @@ suite('Functional Tests', function() {
             })
             .end(function (err, res) {
                 assert.equal(res.body.error, 'missing _id');
+                done();
             });
     }); 
 });
