@@ -205,7 +205,7 @@ module.exports = function (app) {
       }
       const currentTime = new Date();
       let update = {};
-      update.updated_on = currentTime;   
+      update['issues.$.updated_on'] = currentTime;   
       if(issue_title){
         update['issues.$.issue_title'] = issue_title;
       }
