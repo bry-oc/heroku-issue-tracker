@@ -9,7 +9,7 @@ module.exports = function (app) {
   const issueSchema = new mongoose.Schema({
     assigned_to: { type: String, default: "" },
     status_text: { type: String, default: "" },
-    open: String,
+    open: {type: Boolean, default: true},
     issue_title: String,
     issue_text: String,
     created_by: String,
@@ -114,7 +114,7 @@ module.exports = function (app) {
           const newIssue = new Issue({
             assigned_to: assigned_to,
             status_text: status_text,
-            open: 'true',
+            open: true,
             issue_title: issue_title,
             issue_text: issue_text,
             created_by: created_by,
@@ -153,7 +153,7 @@ module.exports = function (app) {
           const newIssue = new Issue({
             assigned_to: assigned_to,
             status_text: status_text,
-            open: 'true',
+            open: true,
             issue_title: issue_title,
             issue_text: issue_text,
             created_by: created_by,
