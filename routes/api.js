@@ -207,27 +207,29 @@ module.exports = function (app) {
       let update = {};
       update.updated_on = currentTime;   
       if(issue_title){
-        update.issue_title = issue_title;
+        update['issues.$.issue_title'] = issue_title;
       }
       if(issue_text){
-        update.issue_text = issue_text;
+        update['issues.$.issue_text'] = issue_text;
       }
       if(assigned_to){
-        update.assigned_to = assigned_to;
+        update['issues.$.assigned_to'] = assigned_to;
       }
       if(status_text){
-        update.status_text = status_text;
+        update['issues.$.status_text'] = status_text;
       }
       if(created_by){
-        update.created_by = created_by;
+        update['issues.$.created_by'] = created_by;
       }
       if(open){
-        update.open = open;
+        update['issues.$.open'] = open;
       }
-      Project.findOne({name: projectName, 'issues._id': _id}, function (err, proj) {
+      Project.findOneAndUpdate({name: projectName, 'issues._id': _id}, {$set: update}, function (err, proj) {
         if(err){
           return console.error(err);
         } else if (proj) {
+          return res.json({result: 'successfully updated', _id: _id});
+          /*
           Issue.findByIdAndUpdate(_id, update, {new: true}, function (err, issue) {
             if(err){
               return console.error(err);
@@ -237,6 +239,7 @@ module.exports = function (app) {
               return res.json({error: 'could not update', _id: _id});
             }
           })
+          */
         } else {
           return res.json({error: 'could not update', _id: _id});
         }
