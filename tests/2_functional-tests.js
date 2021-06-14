@@ -101,12 +101,12 @@ suite('Functional Tests', function() {
             .put('/api/issues/testing')
             .type('form')
             .send({
-                _id: '60c4045384898226dc456f47',
+                _id: '60c7c07df137ca3a8411033f',
                 status_text: 'updated status'
             })
             .end(function (err, res) {
                 assert.equal(res.body.result, 'successfully updated' );
-                assert.equal(res.body._id, '60c4045384898226dc456f47');
+                assert.equal(res.body._id, '60c7c07df137ca3a8411033f');
                 done();
             });
     });
@@ -116,13 +116,13 @@ suite('Functional Tests', function() {
             .put('/api/issues/testing')
             .type('form')
             .send({
-                _id: '60c4045384898226dc456f49',
+                _id: '60c7c07df137ca3a8411033f',
                 status_text: 'updated status',
                 assigned_to: 'updated'
             })
             .end(function (err, res) {
                 assert.equal(res.body.result, 'successfully updated' );
-                assert.equal(res.body._id, '60c4045384898226dc456f49');
+                assert.equal(res.body._id, '60c7c07df137ca3a8411033f');
                 done();
             });
     });
